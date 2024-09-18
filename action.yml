@@ -1,0 +1,38 @@
+name: Find duplicate items in a CourseKata course
+description: |
+  Check a CourseKata course for duplicate interactive items, such as repeated CKCode items with the
+  same ID. These will trigger build errors, so they should be fixed before the course is built.
+author: 'Adam Blake'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+
+inputs:
+  include:
+    description: |
+      A multiline input of the globs to use to build search paths to find the
+      book configuration files. Use a newline to separate each glob.
+    required: false
+    default: .
+  follow-symbolic-links:
+    description: |
+      Indicates whether to follow symbolic links when searching the globs for
+      book configurations.
+    required: false
+    default: 'true'
+  fail-on-duplicates:
+    description: |
+      Indicates whether to fail the action if duplicate items are found. If set
+      to 'false', the action will only return warnings.
+    required: false
+    default: 'true'
+
+outputs:
+  duplicates:
+    description: |
+      A JSON object as a string, where the keys are the IDs of the duplicate items and the values
+      are the files and lines they were found in. If none are found, an empty object is returned.
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
