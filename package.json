@@ -1,7 +1,7 @@
 {
   "name": "@coursekata/find-duplicate-items",
   "description": "GitHub Action to find duplicate items in CourseKata courses.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Adam Blake <adam@coursekata.org>",
   "private": true,
   "license": "MIT",
