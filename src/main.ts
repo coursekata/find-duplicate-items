@@ -83,7 +83,9 @@ async function summarize(duplicates: DuplicateMap): Promise<void> {
       ],
       ...Object.entries(duplicates).map(([id, locations]) => [
         id,
-        locations.map(location => location.file).join('<br>')
+        locations
+          .map(location => `${location.file}:${location.line}`)
+          .join('<br>')
       ])
     ])
     .write()
