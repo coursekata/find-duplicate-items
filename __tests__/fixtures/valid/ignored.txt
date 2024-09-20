@@ -1,0 +1,9 @@
+# Valid File
+
+<iframe
+  data-type="learnosity"
+  id="Pulse2"
+  src="https://coursekata.org/learnosity/preview/Pulse2"
+  width="100%"
+  height="660">
+</iframe>

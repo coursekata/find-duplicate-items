@@ -6,11 +6,10 @@
 [![CodeQL](https://github.com/coursekata/find-duplicate-items/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/coursekata/find-duplicate-items/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-This action searches a directory for CourseKata book markdown files. Within
-those markdown files, it searches for any interactive items that are duplicated
-within the course, as these will trigger a build error. The action will report
-the location of the duplicates and the IDs of the duplicated items, if any are
-found.
+This action searches a directory for CourseKata book content files. Within those
+files, it searches for any interactive items that are duplicated within the
+course, as these will trigger a build error. The action will report the location
+of the duplicates and the IDs of the duplicated items, if any are found.
 
 ## Inputs
 
