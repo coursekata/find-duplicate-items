@@ -30,7 +30,7 @@ export async function findDuplicateItems(
 ): Promise<DuplicateMap> {
   let locations: IDLocation[] = []
   const { files } = await globPages(include, followSymbolicLinks)
-  for await (const file of files) {
+  for (const file of files) {
     const ext = path.parse(file).ext.toLowerCase()
     if (ext === '.md') {
       locations = locations.concat(await getIDsFromMarkdown(file))
