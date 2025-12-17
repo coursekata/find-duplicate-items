@@ -20,6 +20,10 @@ need to perform some initial setup steps before you can develop the action.
 > to the correct version when you `cd` into the repository. Additionally, this
 > `.node-version` file is used by GitHub Actions in any `actions/setup-node`
 > actions.
+>
+> You'll also need [`actionlint`](https://github.com/rhysd/actionlint) installed
+> to lint GitHub Actions workflow files. Install via Homebrew (`brew install
+> actionlint`) or see the [installation docs](https://github.com/rhysd/actionlint/blob/main/docs/install.md).
 
 1. :hammer_and_wrench: Install the dependencies
 
