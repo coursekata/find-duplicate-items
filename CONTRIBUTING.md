@@ -25,6 +25,11 @@ need to perform some initial setup steps before you can develop the action.
 > to lint GitHub Actions workflow files. Install via Homebrew
 > (`brew install actionlint`) or see the
 > [installation docs](https://github.com/rhysd/actionlint/blob/main/docs/install.md).
+>
+> You'll also need [`zizmor`](https://zizmor.sh/) installed for GitHub Actions
+> security analysis. Install via Homebrew (`brew install zizmor`), uv
+> (`uv tool install zizmor`), or see the
+> [installation docs](https://docs.zizmor.sh/installation/).
 
 1. :hammer_and_wrench: Install the dependencies
 

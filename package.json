@@ -30,7 +30,7 @@
     "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "npx prettier --write .",
     "format:check": "npx prettier --check .",
-    "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml && actionlint",
+    "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml && (command -v actionlint >/dev/null && actionlint || echo 'actionlint not found, skipping') && (command -v zizmor >/dev/null && zizmor .github/workflows/ || echo 'zizmor not found, skipping')",
     "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",

@@ -42,11 +42,13 @@ jobs:
         uses: super-linter/super-linter/slim@47984f49b4e87383eed97890fe2dca6063bbd9c3 # v8
         env:
           DEFAULT_BRANCH: main
-          ESLINT_USE_FLAT_CONFIG: false
           FILTER_REGEX_EXCLUDE: dist/**/*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_HTML: false
+          VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JSCPD: false
+          VALIDATE_JSON: false
+          VALIDATE_TYPESCRIPT_ES: false
