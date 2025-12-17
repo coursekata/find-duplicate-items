@@ -1,0 +1,7 @@
+- id: find-duplicate-items
+  name: Find duplicate items
+  description: Check CourseKata content for duplicate interactive item IDs
+  entry: find-duplicate-items
+  language: node
+  types_or: [markdown, html]
+  pass_filenames: false

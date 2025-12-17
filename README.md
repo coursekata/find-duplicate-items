@@ -99,3 +99,36 @@ steps:
         const assert_equal = (value) => require("node:assert/strict").deepEqual(value, true)
         assert_equal(Object.keys(JSON.parse(process.env['DUPLICATES'])).length !== 0)
 ```
+
+## Pre-commit Hook
+
+This tool can also be used as a [pre-commit](https://pre-commit.com) hook to
+catch duplicate items before they're committed. This works with pre-commit or
+[prek](https://github.com/j178/prek), a faster Rust-based alternative that's
+fully compatible with pre-commit configurations.
+
+Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/coursekata/find-duplicate-items
+    rev: v2.1.0 # use the latest release
+    hooks:
+      - id: find-duplicate-items
+```
+
+This will scan the entire repository for duplicate items whenever markdown or
+HTML files are staged for commit.
+
+To limit the search to specific directories, pass glob patterns as arguments:
+
+```yaml
+repos:
+  - repo: https://github.com/coursekata/find-duplicate-items
+    rev: v2.1.0
+    hooks:
+      - id: find-duplicate-items
+        args:
+          - content/**/*.md
+          - chapters/**/*.md
+```
