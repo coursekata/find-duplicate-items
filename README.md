@@ -117,7 +117,7 @@ repos:
       - id: find-duplicate-items
 ```
 
-This will scan the entire repository for duplicate items whenever markdown or
+This will scan the entire repository for duplicate items whenever Markdown or
 HTML files are staged for commit.
 
 To limit the search to specific directories, pass glob patterns as arguments:
