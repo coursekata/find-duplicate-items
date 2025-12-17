@@ -73,7 +73,7 @@ jobs:
 
       # https://github.com/actions/github-script
       - name: Test that errors were found
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           DUPLICATES: ${{ steps.test-action--errors.outputs.duplicates }}
         with:
