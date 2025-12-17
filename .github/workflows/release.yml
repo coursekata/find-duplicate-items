@@ -19,10 +19,10 @@ jobs:
       - name: Extract version from tag
         id: version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          MAJOR=${VERSION%%.*}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          MAJOR="${VERSION%%.*}"
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "major=${MAJOR}" >> "${GITHUB_OUTPUT}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.4
