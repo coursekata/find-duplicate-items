@@ -1,0 +1,2 @@
+# Test fixtures contain intentionally malformed markdown
+__tests__/fixtures/**
