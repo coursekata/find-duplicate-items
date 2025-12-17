@@ -77,7 +77,10 @@ it('finds duplicated IDs across pages', async () => {
 })
 
 it('finds duplicated IDs in nested QTI item fenced divs', async () => {
-  const filePath = makeTestFilePath('qti-item-duplicates', 'nested-duplicate.md')
+  const filePath = makeTestFilePath(
+    'qti-item-duplicates',
+    'nested-duplicate.md'
+  )
 
   const duplicates = await findDuplicateItems([
     globTestFiles('qti-item-duplicates')
