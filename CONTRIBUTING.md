@@ -22,8 +22,9 @@ need to perform some initial setup steps before you can develop the action.
 > actions.
 >
 > You'll also need [`actionlint`](https://github.com/rhysd/actionlint) installed
-> to lint GitHub Actions workflow files. Install via Homebrew (`brew install
-> actionlint`) or see the [installation docs](https://github.com/rhysd/actionlint/blob/main/docs/install.md).
+> to lint GitHub Actions workflow files. Install via Homebrew
+> (`brew install actionlint`) or see the
+> [installation docs](https://github.com/rhysd/actionlint/blob/main/docs/install.md).
 
 1. :hammer_and_wrench: Install the dependencies
 
