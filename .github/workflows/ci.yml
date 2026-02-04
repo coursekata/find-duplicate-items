@@ -34,11 +34,15 @@ jobs:
         id: npm-ci
         run: npm ci
 
-      - name: Check Format
-        id: npm-format-check
-        run: npm run format:check
+      - name: Check (Biome)
+        id: npm-check
+        run: npm run check
 
-      - name: Lint
+      - name: Typecheck
+        id: npm-typecheck
+        run: npm run typecheck
+
+      - name: Lint (Actions)
         id: npm-lint
         run: npm run lint
 

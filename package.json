@@ -33,7 +33,9 @@
     "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "check": "biome check",
     "check:fix": "biome check --write",
-    "lint": "(command -v actionlint >/dev/null && actionlint || echo 'actionlint not found, skipping') && (command -v zizmor >/dev/null && zizmor .github/workflows/ || echo 'zizmor not found, skipping')",
+    "lint": "npm run lint:markdown && npm run lint:actions",
+    "lint:markdown": "markdownlint '**/*.md' --ignore node_modules --ignore dist --ignore coverage",
+    "lint:actions": "(command -v actionlint >/dev/null && actionlint || echo 'actionlint not found, skipping') && (command -v zizmor >/dev/null && zizmor .github/workflows/ || echo 'zizmor not found, skipping')",
     "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt && npx ncc build src/cli.ts -o dist/cli-tmp --source-map && mv dist/cli-tmp/index.js dist/cli.js && mv dist/cli-tmp/index.js.map dist/cli.js.map && rm -rf dist/cli-tmp",
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",
@@ -62,6 +64,7 @@
     "jest": "^29.7.0",
     "lefthook": "^2.0.13",
     "make-coverage-badge": "^1.2.0",
+    "markdownlint-cli": "^0.47.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2"
   }

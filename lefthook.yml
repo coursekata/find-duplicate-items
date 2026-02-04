@@ -5,5 +5,14 @@ pre-commit:
       glob: "*.{ts,tsx,js,jsx}"
       run: npm exec biome -- check --no-errors-on-unmatched {staged_files}
       stage_fixed: true
+    markdownlint:
+      glob: "*.md"
+      run: npm exec markdownlint -- {staged_files}
     typecheck:
-      run: npx tsc --noEmit
+      run: npm exec tsc -- --noEmit
+    actionlint:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: command -v actionlint >/dev/null && actionlint {staged_files} || echo 'actionlint not found, skipping'
+    zizmor:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: command -v zizmor >/dev/null && zizmor {staged_files} || echo 'zizmor not found, skipping'
