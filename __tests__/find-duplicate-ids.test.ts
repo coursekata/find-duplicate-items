@@ -92,3 +92,18 @@ it('finds duplicated IDs in nested QTI item fenced divs', async () => {
     ]
   })
 })
+
+it('finds duplicated IDs in nested fenced divs without blank lines', async () => {
+  const filePath = makeTestFilePath(
+    'qti-item-duplicates',
+    'nested-no-blank-line.md'
+  )
+
+  const duplicates = await findDuplicateItems([filePath])
+  expect(duplicates).toMatchObject({
+    'light-grating-slit': [
+      makeLocation('light-grating-slit', filePath, 2),
+      makeLocation('light-grating-slit', filePath, 3)
+    ]
+  })
+})

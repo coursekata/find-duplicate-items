@@ -5,11 +5,14 @@ import * as glob from '@actions/glob'
 import { Parser } from 'htmlparser2'
 import MarkdownIt from 'markdown-it'
 import markdownItAttrs from 'markdown-it-attrs'
+import markdownItContainer from 'markdown-it-container'
 import { relativizePaths } from './utils'
 
 const log = { debug: (message: string) => core.debug(relativizePaths(message)) }
 const markdown_parser = new MarkdownIt({ html: true })
 markdown_parser.use(markdownItAttrs)
+// Register a generic container to parse fenced divs (:::) with any name
+markdown_parser.use(markdownItContainer, '', { validate: () => true })
 
 export type DuplicateMap = Record<string, IDLocation[]>
 export interface IDLocation {
