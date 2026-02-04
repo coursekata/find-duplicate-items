@@ -1,5 +1,5 @@
-import * as fs from 'fs/promises'
-import * as path from 'path'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import { Parser } from 'htmlparser2'
@@ -46,7 +46,7 @@ export async function findDuplicateItems(
 
   const seen: DuplicateMap = {}
   const duplicates: DuplicateMap = {}
-  locations.forEach(location => {
+  locations.forEach((location) => {
     location.file = relativizePaths(location.file)
     if (location.id in seen) {
       duplicates[location.id] = seen[location.id]
@@ -55,7 +55,7 @@ export async function findDuplicateItems(
     seen[location.id].push(location)
   })
 
-  Object.keys(duplicates).forEach(key => {
+  Object.keys(duplicates).forEach((key) => {
     duplicates[key].sort((a, b) => {
       if (a.file < b.file) return -1
       if (a.file > b.file) return 1
@@ -87,7 +87,7 @@ async function globPages(
   })
 
   const globbedFiles = await globber.glob()
-  const files = globbedFiles.filter(file => {
+  const files = globbedFiles.filter((file) => {
     return ['.html', '.md'].includes(path.parse(file).ext.toLowerCase())
   })
 
@@ -103,14 +103,12 @@ async function globPages(
 async function getIDsFromMarkdown(path: string): Promise<IDLocation[]> {
   const tokens = await fs
     .readFile(path, 'utf-8')
-    .then(contents => markdown_parser.parse(contents, {}))
+    .then((contents) => markdown_parser.parse(contents, {}))
 
   const idsWithLines: IDLocation[] = []
-  tokens.forEach(token => {
-    const idAttr = token.attrs?.find(attr => attr[0] === 'id')
-    const videoAttr = token.attrs?.find(
-      attr => attr[0] === 'data-type' && attr[1] === 'vimeo'
-    )
+  tokens.forEach((token) => {
+    const idAttr = token.attrs?.find((attr) => attr[0] === 'id')
+    const videoAttr = token.attrs?.find((attr) => attr[0] === 'data-type' && attr[1] === 'vimeo')
     if (idAttr && !videoAttr) {
       idsWithLines.push({
         id: idAttr[1],
@@ -120,18 +118,16 @@ async function getIDsFromMarkdown(path: string): Promise<IDLocation[]> {
     }
 
     if (token.type === 'html_block') {
-      const resolveBlockLines = (
-        line: number | undefined
-      ): number | undefined =>
+      const resolveBlockLines = (line: number | undefined): number | undefined =>
         line && token.map ? line - 1 + token.map[0] + 1 : undefined
 
-      getIDsFromHTMLBlock(token.content).forEach(location =>
+      for (const location of getIDsFromHTMLBlock(token.content)) {
         idsWithLines.push({
           id: location.id,
           file: path,
           line: resolveBlockLines(location.line)
         })
-      )
+      }
     }
   })
 
@@ -146,8 +142,8 @@ async function getIDsFromMarkdown(path: string): Promise<IDLocation[]> {
 async function getIDsFromHTML(path: string): Promise<IDLocation[]> {
   return await fs
     .readFile(path, 'utf-8')
-    .then(content => getIDsFromHTMLBlock(content))
-    .then(locations => locations.map(location => ({ ...location, file: path })))
+    .then((content) => getIDsFromHTMLBlock(content))
+    .then((locations) => locations.map((location) => ({ ...location, file: path })))
 }
 
 /**
@@ -173,7 +169,7 @@ function getIDsFromHTMLBlock(block: string): Omit<IDLocation, 'file'>[] {
       },
       // onopentag fires after the tag is read, so the currentLine may not be the line the id is on
       // but this event allows us to filter tags based on attributes
-      onopentag(name: string, attribs: { [s: string]: string }): void {
+      onopentag(_name: string, attribs: { [s: string]: string }): void {
         if (attribs['data-type'] === 'vimeo' && addedIdThisBlock) {
           idsWithLines.pop()
         }
@@ -183,7 +179,7 @@ function getIDsFromHTMLBlock(block: string): Omit<IDLocation, 'file'>[] {
     { decodeEntities: true }
   )
 
-  block.split('\n').forEach(line => {
+  block.split('\n').forEach((line) => {
     parser.write(line)
     currentLine++
   })

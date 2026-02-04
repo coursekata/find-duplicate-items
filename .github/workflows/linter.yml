@@ -45,8 +45,8 @@ jobs:
           FILTER_REGEX_EXCLUDE: (dist/.*|__tests__/fixtures/.*)
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_BIOME_FORMAT: false
-          VALIDATE_BIOME_LINT: false
+          VALIDATE_BIOME_FORMAT: true
+          VALIDATE_BIOME_LINT: true
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JSCPD: false

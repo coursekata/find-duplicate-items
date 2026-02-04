@@ -31,6 +31,11 @@ need to perform some initial setup steps before you can develop the action.
 > (`uv tool install zizmor`), or see the
 > [installation docs](https://docs.zizmor.sh/installation/).
 
+This project uses [Biome](https://biomejs.dev/) for linting and formatting, and
+[Lefthook](https://github.com/evilmartians/lefthook) for pre-commit hooks. When
+you run `npm install`, Lefthook will automatically set up the pre-commit hooks
+to run Biome and TypeScript type checking before each commit.
+
 1. :hammer_and_wrench: Install the dependencies
 
    ```bash
@@ -85,8 +90,9 @@ There are a few things to keep in mind when developing action code:
   [documentation](https://github.com/actions/toolkit/blob/master/README.md).
 
 - The npm scripts and tooling is setup so that you shouldn't need to ever run
-  `tsc` directly. Instead, use the relevant npm scripts to build, test, and lint
-  your code.
+  `tsc` directly. Instead, use the relevant npm scripts to build, test, and
+  check your code. Use `npm run check` to lint and format check, or
+  `npm run check:fix` to auto-fix issues.
 
 ### Developing
 

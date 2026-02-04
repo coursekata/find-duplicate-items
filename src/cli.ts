@@ -7,7 +7,7 @@
  *
  * Patterns are glob patterns to search (default: current directory).
  */
-import { DuplicateMap, findDuplicateItems } from './find-duplicate-items'
+import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items'
 
 // Suppress GitHub Actions debug output (::debug::) when running as CLI
 const originalStdoutWrite = process.stdout.write.bind(process.stdout)
@@ -72,10 +72,7 @@ function formatDuplicates(duplicates: DuplicateMap): string {
 
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2))
-  const duplicates = await findDuplicateItems(
-    options.include,
-    options.followSymbolicLinks
-  )
+  const duplicates = await findDuplicateItems(options.include, options.followSymbolicLinks)
 
   const count = Object.keys(duplicates).length
   if (count > 0) {
@@ -89,7 +86,7 @@ async function main(): Promise<void> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-main().catch(error => {
+main().catch((error) => {
   if (error instanceof Error) {
     console.error('Error:', error.message)
   } else {

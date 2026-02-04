@@ -1,5 +1,5 @@
-import * as path from 'path'
-import { findDuplicateItems, IDLocation } from '../src/find-duplicate-items'
+import * as path from 'node:path'
+import { findDuplicateItems, type IDLocation } from '../src/find-duplicate-items'
 import { relativizePaths } from '../src/utils'
 
 const fixtureDir = path.join(__dirname, 'fixtures')
@@ -21,17 +21,13 @@ it('ignores non-markdown files and yields an empty object for no duplicates', as
 })
 
 it('ignores videos', async () => {
-  const duplicates = await findDuplicateItems([
-    globTestFiles('duplicate-videos')
-  ])
+  const duplicates = await findDuplicateItems([globTestFiles('duplicate-videos')])
   expect(duplicates).toEqual({})
 })
 
 it('tolerates HTML and partial HTML', async () => {
-  const filepath = (name: string): string =>
-    makeTestFilePath('contains-html', name)
-  const location = (path: string, line?: number): IDLocation =>
-    makeLocation('Pulse2', path, line)
+  const filepath = (name: string): string => makeTestFilePath('contains-html', name)
+  const location = (path: string, line?: number): IDLocation => makeLocation('Pulse2', path, line)
 
   const duplicates = await findDuplicateItems([globTestFiles('contains-html')])
   expect(duplicates).toEqual({
@@ -47,12 +43,9 @@ it('tolerates HTML and partial HTML', async () => {
 })
 
 it('finds duplicated IDs within a page', async () => {
-  const filePath = (name: string): string =>
-    makeTestFilePath('repeated-in-page', name)
+  const filePath = (name: string): string => makeTestFilePath('repeated-in-page', name)
 
-  const duplicates = await findDuplicateItems([
-    globTestFiles('repeated-in-page')
-  ])
+  const duplicates = await findDuplicateItems([globTestFiles('repeated-in-page')])
   expect(duplicates).toMatchObject({
     Pulse2: [
       makeLocation('Pulse2', filePath('doubled.md'), 4),
@@ -62,12 +55,9 @@ it('finds duplicated IDs within a page', async () => {
 })
 
 it('finds duplicated IDs across pages', async () => {
-  const filePath = (name: string): string =>
-    makeTestFilePath('repeated-across-pages', name)
+  const filePath = (name: string): string => makeTestFilePath('repeated-across-pages', name)
 
-  const duplicates = await findDuplicateItems([
-    globTestFiles('repeated-across-pages')
-  ])
+  const duplicates = await findDuplicateItems([globTestFiles('repeated-across-pages')])
   expect(duplicates).toMatchObject({
     Pulse2: [
       makeLocation('Pulse2', filePath('duplicate.md'), 4),
@@ -77,14 +67,9 @@ it('finds duplicated IDs across pages', async () => {
 })
 
 it('finds duplicated IDs in nested QTI item fenced divs', async () => {
-  const filePath = makeTestFilePath(
-    'qti-item-duplicates',
-    'nested-duplicate.md'
-  )
+  const filePath = makeTestFilePath('qti-item-duplicates', 'nested-duplicate.md')
 
-  const duplicates = await findDuplicateItems([
-    globTestFiles('qti-item-duplicates')
-  ])
+  const duplicates = await findDuplicateItems([globTestFiles('qti-item-duplicates')])
   expect(duplicates).toMatchObject({
     'qti-item-dupli-id1': [
       makeLocation('qti-item-dupli-id1', filePath, 2),
@@ -94,10 +79,7 @@ it('finds duplicated IDs in nested QTI item fenced divs', async () => {
 })
 
 it('finds duplicated IDs in nested fenced divs without blank lines', async () => {
-  const filePath = makeTestFilePath(
-    'qti-item-duplicates',
-    'nested-no-blank-line.md'
-  )
+  const filePath = makeTestFilePath('qti-item-duplicates', 'nested-no-blank-line.md')
 
   const duplicates = await findDuplicateItems([filePath])
   expect(duplicates).toMatchObject({

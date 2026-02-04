@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { DuplicateMap, findDuplicateItems } from './find-duplicate-items'
+import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items'
 import { relativizePaths } from './utils'
 
 interface ActionInputs {
@@ -39,10 +39,7 @@ function getInputs(): ActionInputs {
 export async function run(): Promise<void> {
   safelyExecute(async () => {
     const inputs = getInputs()
-    const duplicates = await findDuplicateItems(
-      inputs.include,
-      inputs.followSymbolicLinks
-    )
+    const duplicates = await findDuplicateItems(inputs.include, inputs.followSymbolicLinks)
     core.setOutput('duplicates', relativizePaths(JSON.stringify(duplicates)))
     if (Object.keys(duplicates).length) {
       await summarize(duplicates)
@@ -83,9 +80,7 @@ async function summarize(duplicates: DuplicateMap): Promise<void> {
       ],
       ...Object.entries(duplicates).map(([id, locations]) => [
         id,
-        locations
-          .map(location => `${location.file}:${location.line}`)
-          .join('<br>')
+        locations.map((location) => `${location.file}:${location.line}`).join('<br>')
       ])
     ])
     .write()

@@ -32,9 +32,8 @@ of the duplicates and the IDs of the duplicated items, if any are found.
 
 ## Outputs
 
-<!-- prettier-ignore -->
 | name | description | example |
-| - | - | - |
+| -- | -- | -- |
 | `duplicates` | A JSON object as a string, where the keys are the IDs of the duplicate items and the values indicate where the items can be found (file and line number). If none are found, an empty object is returned: `{}` | `'{"duplicated-id": [{"file": "./path/to/file", "line": 16}, {"file": "./path/to/other/file", "line": 14}]}'` |
 
 ## Usage

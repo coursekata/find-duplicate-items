@@ -41412,8 +41412,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.findDuplicateItems = findDuplicateItems;
-const fs = __importStar(__nccwpck_require__(1943));
-const path = __importStar(__nccwpck_require__(6928));
+const fs = __importStar(__nccwpck_require__(1455));
+const path = __importStar(__nccwpck_require__(6760));
 const core = __importStar(__nccwpck_require__(7484));
 const glob = __importStar(__nccwpck_require__(7206));
 const htmlparser2_1 = __nccwpck_require__(5368);
@@ -41449,7 +41449,7 @@ async function findDuplicateItems(include, followSymbolicLinks = true) {
     }
     const seen = {};
     const duplicates = {};
-    locations.forEach(location => {
+    locations.forEach((location) => {
         location.file = (0, utils_1.relativizePaths)(location.file);
         if (location.id in seen) {
             duplicates[location.id] = seen[location.id];
@@ -41457,7 +41457,7 @@ async function findDuplicateItems(include, followSymbolicLinks = true) {
         seen[location.id] = seen[location.id] || [];
         seen[location.id].push(location);
     });
-    Object.keys(duplicates).forEach(key => {
+    Object.keys(duplicates).forEach((key) => {
         duplicates[key].sort((a, b) => {
             if (a.file < b.file)
                 return -1;
@@ -41484,7 +41484,7 @@ async function globPages(include, followSymbolicLinks) {
         matchDirectories: false
     });
     const globbedFiles = await globber.glob();
-    const files = globbedFiles.filter(file => {
+    const files = globbedFiles.filter((file) => {
         return ['.html', '.md'].includes(path.parse(file).ext.toLowerCase());
     });
     log.debug(`Found page files: ${files.join(', ')}`);
@@ -41498,11 +41498,11 @@ async function globPages(include, followSymbolicLinks) {
 async function getIDsFromMarkdown(path) {
     const tokens = await fs
         .readFile(path, 'utf-8')
-        .then(contents => markdown_parser.parse(contents, {}));
+        .then((contents) => markdown_parser.parse(contents, {}));
     const idsWithLines = [];
-    tokens.forEach(token => {
-        const idAttr = token.attrs?.find(attr => attr[0] === 'id');
-        const videoAttr = token.attrs?.find(attr => attr[0] === 'data-type' && attr[1] === 'vimeo');
+    tokens.forEach((token) => {
+        const idAttr = token.attrs?.find((attr) => attr[0] === 'id');
+        const videoAttr = token.attrs?.find((attr) => attr[0] === 'data-type' && attr[1] === 'vimeo');
         if (idAttr && !videoAttr) {
             idsWithLines.push({
                 id: idAttr[1],
@@ -41512,11 +41512,13 @@ async function getIDsFromMarkdown(path) {
         }
         if (token.type === 'html_block') {
             const resolveBlockLines = (line) => line && token.map ? line - 1 + token.map[0] + 1 : undefined;
-            getIDsFromHTMLBlock(token.content).forEach(location => idsWithLines.push({
-                id: location.id,
-                file: path,
-                line: resolveBlockLines(location.line)
-            }));
+            for (const location of getIDsFromHTMLBlock(token.content)) {
+                idsWithLines.push({
+                    id: location.id,
+                    file: path,
+                    line: resolveBlockLines(location.line)
+                });
+            }
         }
     });
     return idsWithLines;
@@ -41529,8 +41531,8 @@ async function getIDsFromMarkdown(path) {
 async function getIDsFromHTML(path) {
     return await fs
         .readFile(path, 'utf-8')
-        .then(content => getIDsFromHTMLBlock(content))
-        .then(locations => locations.map(location => ({ ...location, file: path })));
+        .then((content) => getIDsFromHTMLBlock(content))
+        .then((locations) => locations.map((location) => ({ ...location, file: path })));
 }
 /**
  * Extracts the IDs and their locations from an HTML block.
@@ -41554,14 +41556,14 @@ function getIDsFromHTMLBlock(block) {
         },
         // onopentag fires after the tag is read, so the currentLine may not be the line the id is on
         // but this event allows us to filter tags based on attributes
-        onopentag(name, attribs) {
+        onopentag(_name, attribs) {
             if (attribs['data-type'] === 'vimeo' && addedIdThisBlock) {
                 idsWithLines.pop();
             }
             addedIdThisBlock = false;
         }
     }, { decodeEntities: true });
-    block.split('\n').forEach(line => {
+    block.split('\n').forEach((line) => {
         parser.write(line);
         currentLine++;
     });
@@ -41683,9 +41685,7 @@ async function summarize(duplicates) {
         ],
         ...Object.entries(duplicates).map(([id, locations]) => [
             id,
-            locations
-                .map(location => `${location.file}:${location.line}`)
-                .join('<br>')
+            locations.map((location) => `${location.file}:${location.line}`).join('<br>')
         ])
     ])
         .write();
@@ -41785,14 +41785,6 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 1943:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs/promises");
-
-/***/ }),
-
 /***/ 8611:
 /***/ ((module) => {
 
@@ -41838,6 +41830,22 @@ module.exports = require("node:crypto");
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 1455:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:fs/promises");
+
+/***/ }),
+
+/***/ 6760:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
 
 /***/ }),
 
