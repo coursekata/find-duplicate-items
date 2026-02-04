@@ -16,6 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-tags: true
           persist-credentials: false
 
       - name: Extract version from tag
@@ -26,10 +27,43 @@ jobs:
           echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "major=${MAJOR}" >> "${GITHUB_OUTPUT}"
 
+      - name: Find previous semver tag
+        id: prev_tag
+        run: |
+          # Get all semver tags sorted by version, excluding major-only tags like v2
+          CURRENT_TAG="${GITHUB_REF#refs/tags/}"
+          PREV_TAG=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | grep -B1 "^${CURRENT_TAG}$" | head -1)
+          if [ "$PREV_TAG" = "$CURRENT_TAG" ]; then
+            # This is the first release, no previous tag
+            PREV_TAG=""
+          fi
+          echo "tag=${PREV_TAG}" >> "${GITHUB_OUTPUT}"
+
+      - name: Generate release body
+        id: body
+        env:
+          PREV_TAG: ${{ steps.prev_tag.outputs.tag }}
+          REPO: ${{ github.repository }}
+        run: |
+          CURRENT_TAG="${GITHUB_REF#refs/tags/}"
+
+          if [ -n "$PREV_TAG" ]; then
+            BODY="**Full Changelog**: https://github.com/${REPO}/compare/${PREV_TAG}...${CURRENT_TAG}"
+          else
+            BODY="**Full Changelog**: https://github.com/${REPO}/commits/${CURRENT_TAG}"
+          fi
+
+          # Use delimiter for multiline output
+          {
+            echo "body<<EOF"
+            echo "$BODY"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
-          generate_release_notes: true
+          body: ${{ steps.body.outputs.body }}
           make_latest: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
