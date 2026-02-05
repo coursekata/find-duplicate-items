@@ -42,7 +42,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "typecheck": "tsc --noEmit",
     "all": "npm run check:fix && npm run lint && npm run test && npm run coverage && npm run package",
-    "prepare": "lefthook install",
+    "prepare": "command -v lefthook >/dev/null && lefthook install || true",
     "start": "node dist/index.js"
   },
   "dependencies": {
