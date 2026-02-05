@@ -1,27 +1,27 @@
-// dirty patch to keep @actions/core from printing during tests
+// See: https://jestjs.io/docs/configuration
+
+// Suppress @actions/core workflow command output (::debug::, etc.) during tests
 const processStdoutWrite = process.stdout.write.bind(process.stdout)
-process.stdout.write = (strOrBytes, encodingOrCallback, callback) => {
-  if (typeof strOrBytes === 'string' && !strOrBytes.startsWith('::')) {
-    return processStdoutWrite(strOrBytes, encodingOrCallback, callback)
-  }
-  return true
+process.stdout.write = (str, encoding, callback) => {
+  if (typeof str === 'string' && str.startsWith('::')) return true
+  return processStdoutWrite(str, encoding, callback)
 }
 
-/** @type {import('jest').Config} */
-const config = {
-  preset: 'ts-jest',
-  verbose: true,
+/** @type {import('ts-jest').JestConfigWithTsJest} **/
+export default {
   clearMocks: true,
-  testEnvironment: 'node',
-  moduleFileExtensions: ['js', 'ts'],
-  testMatch: ['**/*.test.ts'],
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  transform: {
-    '^.+\\.ts$': 'ts-jest'
-  },
-  coverageReporters: ['json-summary', 'text', 'lcov'],
   collectCoverage: true,
-  collectCoverageFrom: ['./src/**']
+  collectCoverageFrom: ['./src/**'],
+  coverageReporters: ['json-summary', 'text', 'lcov'],
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleFileExtensions: ['ts', 'js'],
+  preset: 'ts-jest',
+  resolver: 'ts-jest-resolver',
+  testEnvironment: 'node',
+  testMatch: ['**/*.test.ts'],
+  testPathIgnorePatterns: ['/dist/', '/node_modules/'],
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { useESM: true }]
+  },
+  verbose: true
 }
-
-module.exports = config

@@ -1,7 +1,9 @@
 import * as path from 'node:path'
-import { findDuplicateItems, type IDLocation } from '../src/find-duplicate-items'
-import { relativizePaths } from '../src/utils'
+import { fileURLToPath } from 'node:url'
+import { findDuplicateItems, type IDLocation } from '../src/find-duplicate-items.js'
+import { relativizePaths } from '../src/utils.js'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const fixtureDir = path.join(__dirname, 'fixtures')
 const globTestFiles = (pattern: string): string =>
   relativizePaths(path.join(fixtureDir, pattern, '*'))

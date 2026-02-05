@@ -34,5 +34,5 @@ outputs:
       are the files and lines they were found in. If none are found, an empty object is returned.
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

@@ -1,14 +1,14 @@
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
-import * as core from '@actions/core'
-import * as glob from '@actions/glob'
+import { debug } from '@actions/core'
+import { create } from '@actions/glob'
 import { Parser } from 'htmlparser2'
 import MarkdownIt from 'markdown-it'
 import markdownItAttrs from 'markdown-it-attrs'
 import markdownItContainer from 'markdown-it-container'
-import { relativizePaths } from './utils'
+import { relativizePaths } from './utils.js'
 
-const log = { debug: (message: string) => core.debug(relativizePaths(message)) }
+const log = { debug: (message: string) => debug(relativizePaths(message)) }
 const markdown_parser = new MarkdownIt({ html: true })
 markdown_parser.use(markdownItAttrs)
 // Register a generic container to parse fenced divs (:::) with any name
@@ -81,7 +81,7 @@ async function globPages(
 ): Promise<{ files: string[]; searchPaths: string[] }> {
   log.debug(`Globbing for patterns: ${include.join(', ')}`)
 
-  const globber = await glob.create(include.join('\n'), {
+  const globber = await create(include.join('\n'), {
     followSymbolicLinks: followSymbolicLinks,
     matchDirectories: false
   })

@@ -7,7 +7,7 @@
  *
  * Patterns are glob patterns to search (default: current directory).
  */
-import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items'
+import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items.js'
 
 // Suppress GitHub Actions debug output (::debug::) when running as CLI
 const originalStdoutWrite = process.stdout.write.bind(process.stdout)

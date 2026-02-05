@@ -1,6 +1,14 @@
-import * as core from '@actions/core'
-import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items'
-import { relativizePaths } from './utils'
+import {
+  debug,
+  getBooleanInput,
+  getMultilineInput,
+  setFailed,
+  setOutput,
+  summary,
+  warning
+} from '@actions/core'
+import { type DuplicateMap, findDuplicateItems } from './find-duplicate-items.js'
+import { relativizePaths } from './utils.js'
 
 interface ActionInputs {
   include: string[]
@@ -20,14 +28,14 @@ function getInputs(): ActionInputs {
   }
 
   if (process.env.GITHUB_ACTIONS) {
-    inputs.include = core.getMultilineInput('include')
-    inputs.followSymbolicLinks = core.getBooleanInput('follow-symbolic-links')
-    inputs.failOnDuplicates = core.getBooleanInput('fail-on-duplicates')
+    inputs.include = getMultilineInput('include')
+    inputs.followSymbolicLinks = getBooleanInput('follow-symbolic-links')
+    inputs.failOnDuplicates = getBooleanInput('fail-on-duplicates')
   }
 
-  core.debug(`include: ${inputs.include}`)
-  core.debug(`followSymbolicLinks: ${inputs.followSymbolicLinks}`)
-  core.debug(`failOnDuplicates: ${inputs.failOnDuplicates}`)
+  debug(`include: ${inputs.include}`)
+  debug(`followSymbolicLinks: ${inputs.followSymbolicLinks}`)
+  debug(`failOnDuplicates: ${inputs.failOnDuplicates}`)
 
   return inputs
 }
@@ -40,10 +48,14 @@ export async function run(): Promise<void> {
   safelyExecute(async () => {
     const inputs = getInputs()
     const duplicates = await findDuplicateItems(inputs.include, inputs.followSymbolicLinks)
-    core.setOutput('duplicates', relativizePaths(JSON.stringify(duplicates)))
+    setOutput('duplicates', relativizePaths(JSON.stringify(duplicates)))
     if (Object.keys(duplicates).length) {
       await summarize(duplicates)
-      core.setFailed('Duplicate items found, see summary for details')
+      if (inputs.failOnDuplicates) {
+        setFailed('Duplicate items found, see summary for details')
+      } else {
+        warning('Duplicate items found, see summary for details')
+      }
     }
   })
 }
@@ -58,9 +70,9 @@ async function safelyExecute(action: () => Promise<void>): Promise<void> {
     return await action()
   } catch (error) {
     if (error instanceof Error) {
-      core.setFailed(error.message)
+      setFailed(error.message)
     } else {
-      core.setFailed(String(error))
+      setFailed(String(error))
     }
   }
 }
@@ -71,7 +83,7 @@ async function safelyExecute(action: () => Promise<void>): Promise<void> {
  * @returns Resolves when the summary is complete.
  */
 async function summarize(duplicates: DuplicateMap): Promise<void> {
-  await core.summary
+  await summary
     .addHeading('Duplicate Items Found')
     .addTable([
       [
